@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="wheelView">
+        <attr name="wh_textsize" format="integer" />
+        <attr name="wh_textsizecenter" format="integer" />
+        <attr name="wh_lineSpace" format="float" />
+        <attr name="wh_centerTextColor" format="integer" />
+        <attr name="wh_outerTextColor" format="integer" />
+        <attr name="wh_dividerTextColor" format="integer" />
+        <attr name="wh_itemsVisibleCount" format="integer" />
+        <attr name="wh_isLoop" format="boolean" />
+        <attr name="wh_initialPosition" format="integer" />
+        <attr name="wh_scaleX" format="float" />
+    </declare-styleable>
+</resources>

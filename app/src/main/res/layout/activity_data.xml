@@ -51,21 +51,21 @@
             android:layout_height="200dp"
             android:orientation="horizontal"
             >
-        <com.she.wheelview.loopview.LoopView
+        <com.she.core.loopview.LoopView
                 android:id="@+id/loopView_year"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:awv_textsize="18"
                 />
-        <com.she.wheelview.loopview.LoopView
+        <com.she.core.loopview.LoopView
                 android:id="@+id/loopView_mooth"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:awv_textsize="18"
                 />
-        <com.she.wheelview.loopview.LoopView
+        <com.she.core.loopview.LoopView
                 android:id="@+id/loopView_day"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

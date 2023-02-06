@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MyActivity">
 
 
     <Button
@@ -16,7 +16,7 @@
         android:id="@+id/button"
         />
 
-    <com.she.wheelview.loopview.LoopView
+    <com.she.core.loopview.LoopView
         android:layout_marginTop="50dp"
         android:id="@+id/loopView"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.she.wheelview.loopview;
+package com.she.core.loopview;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-import com.she.wheelview.R;
+import com.she.core.R;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -156,21 +156,21 @@ public class LoopView extends View {
         flingGestureDetector = new GestureDetector(context, new LoopViewGestureListener(this));
         flingGestureDetector.setIsLongpressEnabled(false);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attributeset, R.styleable.androidWheelView);
-        textSize = typedArray.getInteger(R.styleable.androidWheelView_awv_textsize, DEFAULT_TEXT_SIZE);
-        textSizeCenter = typedArray.getInteger(R.styleable.androidWheelView_awv_textsizecenter, DEFAULT_TEXT_SIZE);
+        TypedArray typedArray = context.obtainStyledAttributes(attributeset, R.styleable.wheelView);
+        textSize = typedArray.getInteger(R.styleable.wheelView_wh_textsize, DEFAULT_TEXT_SIZE);
+        textSizeCenter = typedArray.getInteger(R.styleable.wheelView_wh_textsizecenter, DEFAULT_TEXT_SIZE);
         textSize = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
         textSizeCenter = (int) (Resources.getSystem().getDisplayMetrics().density * textSizeCenter);
-        lineSpacingMultiplier = typedArray.getFloat(R.styleable.androidWheelView_awv_lineSpace, DEFAULT_LINE_SPACE);
-        centerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_centerTextColor, 0xffec6f1a); //中间选中的颜色：ff313131
-        outerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_outerTextColor, 0xffafafaf);
-        dividerColor = typedArray.getInteger(R.styleable.androidWheelView_awv_dividerTextColor, 0xffc5c5c5);
+        lineSpacingMultiplier = typedArray.getFloat(R.styleable.wheelView_wh_lineSpace, DEFAULT_LINE_SPACE);
+        centerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_centerTextColor, 0xffec6f1a); //中间选中的颜色：ff313131
+        outerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_outerTextColor, 0xffafafaf);
+        dividerColor = typedArray.getInteger(R.styleable.wheelView_wh_dividerTextColor, 0xffc5c5c5);
         itemsVisibleCount =
-                typedArray.getInteger(R.styleable.androidWheelView_awv_itemsVisibleCount, DEFAULT_VISIBIE_ITEMS);
+                typedArray.getInteger(R.styleable.wheelView_wh_itemsVisibleCount, DEFAULT_VISIBIE_ITEMS);
         if (itemsVisibleCount % 2 == 0) {
             itemsVisibleCount = DEFAULT_VISIBIE_ITEMS;
         }
-        isLoop = typedArray.getBoolean(R.styleable.androidWheelView_awv_isLoop, true);
+        isLoop = typedArray.getBoolean(R.styleable.wheelView_wh_isLoop, true);
         typedArray.recycle();
 
         drawingStrings = new String[itemsVisibleCount];

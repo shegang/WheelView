@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import com.she.wheelview.loopview.LoopView;
-import com.she.wheelview.loopview.OnItemSelectedListener;
+import com.she.core.loopview.LoopView;
+import com.she.core.loopview.OnItemSelectedListener;
 
 import java.util.ArrayList;
 

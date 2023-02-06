@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <com.she.wheelview.loopview.LoopView
+    <com.she.core.loopview.LoopView
         android:layout_marginTop="50dp"
         android:id="@+id/loopView"
         android:layout_width="match_parent"
