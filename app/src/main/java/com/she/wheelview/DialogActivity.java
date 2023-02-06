@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.she.core.loopview.ItemData;
 import com.she.core.loopview.LoopView;
 import com.she.core.loopview.OnItemSelectedListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sg on 2017/3/25.
@@ -50,8 +52,18 @@ public class DialogActivity extends Activity {
         loopView.setTextSizeCenter((int) (Resources.getSystem().getDisplayMetrics().density * 16));
 
         ArrayList<String> list = new ArrayList<String>();
+        List<ItemData<User>> itemDatas = new ArrayList<ItemData<User>>();
+
+
         for (int i = 0; i < 15; i++) {
-            list.add("item " + i);
+            ItemData<User> itemData = new ItemData();
+            User user = new User();
+            user.name = "自定义item " + i;
+            user.age = i+"";
+            itemData.setItem(user);
+            itemData.setItemName(user.getName());
+            itemDatas.add(itemData);
+//            list.add("item " + i);
         }
         // 滚动监听
         loopView.setListener(new OnItemSelectedListener() {
@@ -65,7 +77,8 @@ public class DialogActivity extends Activity {
             }
         });
         // 设置原始数据
-        loopView.setItems(list);
+//        loopView.setItems(new ArrayList<>());
+        loopView.setItemDatas(itemDatas);
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
