@@ -21,11 +21,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
 /**
- * Created by sg on 2016/8/18.
+ * Created by Weidongjian on 2015/8/18.
  */
-public class LoopView<T> extends View {
+public class LoopView extends View {
 
     private float scaleX = 1.05F;
 
@@ -52,11 +51,10 @@ public class LoopView<T> extends View {
     private Paint paintOuterText;
     private Paint paintCenterText;
     private Paint paintIndicator;
+
     List<String> items;
-    List<ItemData<T>> itemDatas;
 
     int textSize;
-    int textSizeCenter;
     int maxTextHeight;
 
     int outerTextColor;
@@ -158,9 +156,7 @@ public class LoopView<T> extends View {
 
         TypedArray typedArray = context.obtainStyledAttributes(attributeset, R.styleable.wheelView);
         textSize = typedArray.getInteger(R.styleable.wheelView_wh_textsize, DEFAULT_TEXT_SIZE);
-        textSizeCenter = typedArray.getInteger(R.styleable.wheelView_wh_textsizecenter, DEFAULT_TEXT_SIZE);
         textSize = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
-        textSizeCenter = (int) (Resources.getSystem().getDisplayMetrics().density * textSizeCenter);
         lineSpacingMultiplier = typedArray.getFloat(R.styleable.wheelView_wh_lineSpace, DEFAULT_LINE_SPACE);
         centerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_centerTextColor, 0xffec6f1a); //中间选中的颜色：ff313131
         outerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_outerTextColor, 0xffafafaf);
@@ -208,7 +204,7 @@ public class LoopView<T> extends View {
         paintCenterText.setAntiAlias(true);
         paintCenterText.setTextScaleX(scaleX);
         paintCenterText.setTypeface(Typeface.MONOSPACE);
-        paintCenterText.setTextSize(textSizeCenter);
+        paintCenterText.setTextSize(textSize);
 
         paintIndicator = new Paint();
         paintIndicator.setColor(dividerColor);
@@ -217,15 +213,9 @@ public class LoopView<T> extends View {
     }
 
     private void remeasure() {
-        if (items == null || items.size() <0) {
-            if (itemDatas == null || itemDatas.size() <= 0) {
-                return;
-            }
-//            return;
+        if (items == null && items.size() > 0) {
+            return;
         }
-//        if (itemDatas == null && itemDatas.size() > 0) {
-//            return;
-//        }
 
         measuredWidth = getMeasuredWidth();
 
@@ -242,18 +232,15 @@ public class LoopView<T> extends View {
 
         paintCenterText.getTextBounds("\u661F\u671F", 0, 2, tempRect); // 星期
         maxTextHeight = tempRect.height();
-        halfCircumference = (int) (measuredHeight * Math.PI / 2) + 5;
+        halfCircumference = (int) (measuredHeight * Math.PI / 2);
 
         maxTextHeight = (int) (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)));
 
         radius = measuredHeight / 2;
-        firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F) - 4;
-        secondLineY = (int) ((measuredHeight + lineSpacingMultiplier * maxTextHeight) / 2.0F) + 4;
+        firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);
+        secondLineY = (int) ((measuredHeight + lineSpacingMultiplier * maxTextHeight) / 2.0F);
         if (initPosition == -1) {
             if (isLoop) {
-                if (items == null || items.size() <0) {
-                    initPosition = (itemDatas.size() + 1) / 2;
-                }else
                 initPosition = (items.size() + 1) / 2;
             } else {
                 initPosition = 0;
@@ -309,20 +296,7 @@ public class LoopView<T> extends View {
         if (size > 0.0F) {
             textSize = (int) (context.getResources().getDisplayMetrics().density * size);
             paintOuterText.setTextSize(textSize);
-            paintCenterText.setTextSize(textSizeCenter);
-        }
-    }
-
-    /**
-     * set text size in dp
-     *
-     * @param size
-     */
-    public final void setTextSizeCenter(float size) {
-        if (size > 0.0F) {
-            textSizeCenter = (int) (context.getResources().getDisplayMetrics().density * size);
-            paintOuterText.setTextSize(textSize);
-            paintCenterText.setTextSize(textSizeCenter);
+            paintCenterText.setTextSize(textSize);
         }
     }
 
@@ -342,12 +316,6 @@ public class LoopView<T> extends View {
 
     public final void setItems(List<String> items) {
         this.items = items;
-        remeasure();
-        invalidate();
-    }
-
-    public final void setItemDatas(List<ItemData<T>> itemDatas) {
-        this.itemDatas = itemDatas;
         remeasure();
         invalidate();
     }
@@ -384,15 +352,9 @@ public class LoopView<T> extends View {
      */
     public void setCurrentPosition(int position) {
         if (items == null || items.isEmpty()) {
-            if (itemDatas == null || itemDatas.isEmpty()){
-                return;
-            }
-
+            return;
         }
         int size = items.size();
-        if (itemDatas != null && itemDatas.size()>0){
-            size = itemDatas.size();
-        }
         if (position >= 0 && position < size && position != selectedItem) {
             initPosition = position;
             totalScrollY = 0;
@@ -404,16 +366,10 @@ public class LoopView<T> extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         if (items == null) {
-            if(itemDatas == null){
-                return;
-            }
-//            return;
+            return;
         }
 
         change = (int) (totalScrollY / (lineSpacingMultiplier * maxTextHeight));
-        if(itemDatas != null && itemDatas.size()>0){
-            preCurrentIndex = initPosition + change % itemDatas.size();
-        }else
         preCurrentIndex = initPosition + change % items.size();
 
         if (!isLoop) {
@@ -423,31 +379,12 @@ public class LoopView<T> extends View {
             if (preCurrentIndex > items.size() - 1) {
                 preCurrentIndex = items.size() - 1;
             }
-            if (itemDatas != null && itemDatas.size() > 0) {
-                if (preCurrentIndex > itemDatas.size() - 1) {
-                    preCurrentIndex = itemDatas.size() - 1;
-                }
-            }
         } else {
             if (preCurrentIndex < 0) {
-                if(items != null){
-                    preCurrentIndex = items.size() + preCurrentIndex;
-                }
-
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    preCurrentIndex = itemDatas.size() + preCurrentIndex;
-                }
+                preCurrentIndex = items.size() + preCurrentIndex;
             }
-            if(items != null){
-                if (preCurrentIndex > items.size() - 1) {
-                    preCurrentIndex = preCurrentIndex - items.size();
-                }
-            }
-
-            if (itemDatas != null && itemDatas.size() > 0) {
-                if (preCurrentIndex > itemDatas.size() - 1) {
-                    preCurrentIndex = preCurrentIndex - itemDatas.size();
-                }
+            if (preCurrentIndex > items.size() - 1) {
+                preCurrentIndex = preCurrentIndex - items.size();
             }
         }
 
@@ -458,57 +395,18 @@ public class LoopView<T> extends View {
             int l1 = preCurrentIndex - (itemsVisibleCount / 2 - k1);
             if (isLoop) {
                 while (l1 < 0) {
-                    if(items != null){
-                        l1 = l1 + items.size();
-                    }
-//                    l1 = l1 + items.size();
-                    if (itemDatas != null && itemDatas.size() > 0) {
-                        l1 = l1 + itemDatas.size();
-                    }
+                    l1 = l1 + items.size();
                 }
-                if(items !=null){
-                    while (l1 > items.size() - 1) {
-                        l1 = l1 - items.size();
-                    }
-                    drawingStrings[k1] = items.get(l1);
+                while (l1 > items.size() - 1) {
+                    l1 = l1 - items.size();
                 }
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    while (l1 > itemDatas.size() - 1) {
-                        l1 = l1 - itemDatas.size();
-                    }
-                }
-
-
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    drawingStrings[k1] = itemDatas.get(l1).getItemName();
-                }
-
+                drawingStrings[k1] = items.get(l1);
             } else if (l1 < 0) {
                 drawingStrings[k1] = "";
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    drawingStrings[k1] = "";
-                }
-            } else if(items==null){
-                if (l1 > itemDatas.size() - 1) {
-                    if (itemDatas != null && itemDatas.size() > 0) {
-                        drawingStrings[k1] = "";
-                    }
-                }else {
-                    if (itemDatas != null && itemDatas.size() > 0) {
-                        drawingStrings[k1] = itemDatas.get(l1).getItemName();
-                    }
-                }
-            }else if (l1 > items.size() - 1) {
+            } else if (l1 > items.size() - 1) {
                 drawingStrings[k1] = "";
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    drawingStrings[k1] = "";
-                }
             } else {
                 drawingStrings[k1] = items.get(l1);
-//                drawingStrings[k1] = itemDatas.get(l1).getItemName();
-                if (itemDatas != null && itemDatas.size() > 0) {
-                    drawingStrings[k1] = itemDatas.get(l1).getItemName();
-                }
             }
             k1++;
         }
@@ -556,18 +454,7 @@ public class LoopView<T> extends View {
                     canvas.clipRect(0, 0, measuredWidth, (int) (itemHeight));
                     canvas.drawText(drawingStrings[i], getTextX(drawingStrings[i], paintCenterText, tempRect),
                             maxTextHeight, paintCenterText);
-                    if(items!= null){
-                        selectedItem = items.indexOf(drawingStrings[i]);
-                    }
-                    if(itemDatas!=null){
-//                        selectedItem = itemDatas.indexOf(drawingStrings[i]);
-                        for(int j =0;j<itemDatas.size();j++){
-                            if(itemDatas.get(j).getItemName().equals(drawingStrings[i])){
-                                selectedItem = j;
-                            }
-                        }
-                    }
-//                    selectedItem = items.indexOf(drawingStrings[i]);
+                    selectedItem = items.indexOf(drawingStrings[i]);
                 } else {
                     // other item
                     canvas.clipRect(0, 0, measuredWidth, (int) (itemHeight));
