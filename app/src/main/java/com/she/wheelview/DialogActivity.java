@@ -48,8 +48,8 @@ public class DialogActivity extends Activity {
         LoopView loopView = (LoopView) dialogView.findViewById(R.id.loopView);
 
         loopView.setCenterTextColor(getResources().getColor(R.color.design_default_color_primary));
-        loopView.setTextSize((int) (Resources.getSystem().getDisplayMetrics().density * 14));
-        loopView.setTextSizeCenter((int) (Resources.getSystem().getDisplayMetrics().density * 16));
+//        loopView.setTextSize((int) (Resources.getSystem().getDisplayMetrics().density * 10));
+//        loopView.setTextSizeCenter((int) (Resources.getSystem().getDisplayMetrics().density * 16));
 
         ArrayList<String> list = new ArrayList<String>();
         List<ItemData<User>> itemDatas = new ArrayList<ItemData<User>>();
@@ -77,9 +77,9 @@ public class DialogActivity extends Activity {
             }
         });
         // 设置原始数据
-//        loopView.setItems(new ArrayList<>());
-        loopView.setItemDatas(itemDatas);
-
+        loopView.setItems(new ArrayList<>());
+//        loopView.setItemDatas(itemDatas);
+        loopView.setNotLoop();
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
