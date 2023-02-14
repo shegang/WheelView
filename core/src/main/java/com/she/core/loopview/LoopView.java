@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.she.core.R;
@@ -55,6 +56,7 @@ public class LoopView extends View {
     List<String> items;
 
     int textSize;
+    int textSizeCenter;
     int maxTextHeight;
 
     int outerTextColor;
@@ -157,6 +159,8 @@ public class LoopView extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attributeset, R.styleable.wheelView);
         textSize = typedArray.getInteger(R.styleable.wheelView_wh_textsize, DEFAULT_TEXT_SIZE);
         textSize = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
+        textSizeCenter = typedArray.getInteger(R.styleable.wheelView_wh_textsizecenter, DEFAULT_TEXT_SIZE);
+        textSizeCenter = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
         lineSpacingMultiplier = typedArray.getFloat(R.styleable.wheelView_wh_lineSpace, DEFAULT_LINE_SPACE);
         centerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_centerTextColor, 0xffec6f1a); //中间选中的颜色：ff313131
         outerTextColor = typedArray.getInteger(R.styleable.wheelView_wh_outerTextColor, 0xffafafaf);
@@ -204,7 +208,7 @@ public class LoopView extends View {
         paintCenterText.setAntiAlias(true);
         paintCenterText.setTextScaleX(scaleX);
         paintCenterText.setTypeface(Typeface.MONOSPACE);
-        paintCenterText.setTextSize(textSize);
+        paintCenterText.setTextSize(textSizeCenter);
 
         paintIndicator = new Paint();
         paintIndicator.setColor(dividerColor);
@@ -296,10 +300,21 @@ public class LoopView extends View {
         if (size > 0.0F) {
             textSize = (int) (context.getResources().getDisplayMetrics().density * size);
             paintOuterText.setTextSize(textSize);
-            paintCenterText.setTextSize(textSize);
+            paintCenterText.setTextSize(textSizeCenter);
         }
     }
-
+    /**
+     * set text size in dp
+     *
+     * @param size
+     */
+    public final void setTextSizeCenter(float size) {
+        if (size > 0.0F) {
+            textSizeCenter = (int) (context.getResources().getDisplayMetrics().density * size);
+            paintOuterText.setTextSize(textSize);
+            paintCenterText.setTextSize(textSizeCenter);
+        }
+    }
     public final void setInitPosition(int initPosition) {
         if (initPosition < 0) {
             this.initPosition = 0;
@@ -365,7 +380,7 @@ public class LoopView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (items == null) {
+        if (items == null || items.size()<=0) {
             return;
         }
 
